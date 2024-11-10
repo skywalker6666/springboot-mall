@@ -1,5 +1,6 @@
 package com.alan.springbootmall.model;
 
+import com.alan.springbootmall.constant.ProductCategory;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -18,9 +19,9 @@ public class Product {
     @Basic
     @Column(name = "product_name")
     private String productName;
-    @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "category")
-    private String category;
+    private ProductCategory category;
     @Basic
     @Column(name = "image_url")
     private String imageUrl;
@@ -56,11 +57,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public String getCategory() {
+    public ProductCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ProductCategory category) {
         this.category = category;
     }
 
