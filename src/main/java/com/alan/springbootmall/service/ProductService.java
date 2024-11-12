@@ -9,4 +9,5 @@ import com.alan.springbootmall.model.Product;
 public interface ProductService {
     public Product getProductById(int id);
     public Integer createProduct(ProductRequest productRequest);
+    public void updateProduct(int id,ProductRequest productRequest);
 }
