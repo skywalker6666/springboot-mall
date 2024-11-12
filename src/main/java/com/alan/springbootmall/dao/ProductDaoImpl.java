@@ -1,8 +1,12 @@
 package com.alan.springbootmall.dao;
 
+import com.alan.springbootmall.dto.ProductRequest;
 import com.alan.springbootmall.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 
 /**
  * @author alan9
@@ -14,6 +18,24 @@ public class ProductDaoImpl implements ProductDao {
 
     public Product getProductById(int productId) {
         return productRepository.findByProductId(productId);
+    }
+
+    public Integer createProduct(ProductRequest productRequest) {
+        Product product = new Product();
+
+        product.setProductName(productRequest.getProductName());
+        product.setCategory(productRequest.getCategory());
+        product.setImageUrl(productRequest.getImageUrl());
+        product.setPrice(productRequest.getPrice());
+        product.setStock(productRequest.getStock());
+        product.setDescription(productRequest.getDescription());
+
+        Timestamp currentTimestamp = Timestamp.from(Instant.now());
+        product.setCreatedDate(currentTimestamp);
+        product.setLastModifiedDate(currentTimestamp);
+
+        Product savedProduct = productRepository.save(product);
+        return savedProduct.getProductId();
     }
 
 }
