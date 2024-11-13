@@ -40,9 +40,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     public void updateProduct(int id, ProductRequest productRequest) {
-
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-
         product.setProductName(productRequest.getProductName());
         product.setCategory(productRequest.getCategory());
         product.setImageUrl(productRequest.getImageUrl());
@@ -53,5 +51,7 @@ public class ProductDaoImpl implements ProductDao {
         product.setLastModifiedDate(currentTimestamp);
         productRepository.save(product);
     }
-
+    public void deleteProduct(int id){
+        productRepository.deleteById(id);
+    }
 }

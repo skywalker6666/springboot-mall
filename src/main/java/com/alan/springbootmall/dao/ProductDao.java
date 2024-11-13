@@ -8,7 +8,11 @@ import com.alan.springbootmall.model.Product;
  **/
 public interface ProductDao {
     public Product getProductById(int productId);
+
     public Integer createProduct(ProductRequest productRequest);
-    public void updateProduct(int id,ProductRequest productRequest);
+
+    public void updateProduct(int id, ProductRequest productRequest);
+
+    public void deleteProduct(int id);
 
 }
