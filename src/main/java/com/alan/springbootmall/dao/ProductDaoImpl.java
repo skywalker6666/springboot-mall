@@ -1,13 +1,15 @@
 package com.alan.springbootmall.dao;
 
+import com.alan.springbootmall.dao.Repository.ProductListRepository;
+import com.alan.springbootmall.dao.Repository.ProductRepository;
 import com.alan.springbootmall.dto.ProductRequest;
 import com.alan.springbootmall.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 
 /**
  * @author alan9
@@ -16,6 +18,13 @@ import java.time.Instant;
 public class ProductDaoImpl implements ProductDao {
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    ProductListRepository productListRepository;
+
+    @Override
+    public List<Product> getProducts() {
+        return productListRepository.findAllByOrderByProductIdAsc();
+    }
 
     public Product getProductById(int productId) {
         return productRepository.findByProductId(productId);
@@ -51,7 +60,8 @@ public class ProductDaoImpl implements ProductDao {
         product.setLastModifiedDate(currentTimestamp);
         productRepository.save(product);
     }
-    public void deleteProduct(int id){
+
+    public void deleteProduct(int id) {
         productRepository.deleteById(id);
     }
 }

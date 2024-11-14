@@ -7,6 +7,8 @@ import com.alan.springbootmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @author alan9
  **/
@@ -14,6 +16,12 @@ import org.springframework.stereotype.Component;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public List<Product> getProducts() {
+        return productDao.getProducts();
+    }
+
     @Override
     public Product getProductById(int id) {
         return productDao.getProductById(id);
