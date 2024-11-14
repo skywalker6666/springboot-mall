@@ -1,5 +1,6 @@
 package com.alan.springbootmall.dao;
 
+import com.alan.springbootmall.constant.ProductCategory;
 import com.alan.springbootmall.dao.Repository.ProductListRepository;
 import com.alan.springbootmall.dao.Repository.ProductRepository;
 import com.alan.springbootmall.dto.ProductRequest;
@@ -22,8 +23,17 @@ public class ProductDaoImpl implements ProductDao {
     ProductListRepository productListRepository;
 
     @Override
-    public List<Product> getProducts() {
-        return productListRepository.findAllByOrderByProductIdAsc();
+    public List<Product> getProducts(ProductCategory category, String search) {
+        if (category != null && search != null) {
+            return productListRepository.findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(
+                    category, search, category, search);
+        } else if (category != null) {
+            return productListRepository.findByCategoryOrderByProductIdAsc(category);
+        } else if (search != null) {
+            return productListRepository.findByProductNameContainingOrDescriptionContainingOrderByProductIdAsc(search, search);
+        } else {
+            return productListRepository.findAll(); // 查詢所有產品
+        }
     }
 
     public Product getProductById(int productId) {
