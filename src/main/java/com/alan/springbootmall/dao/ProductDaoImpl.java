@@ -1,8 +1,8 @@
 package com.alan.springbootmall.dao;
 
-import com.alan.springbootmall.constant.ProductCategory;
 import com.alan.springbootmall.dao.Repository.ProductListRepository;
 import com.alan.springbootmall.dao.Repository.ProductRepository;
+import com.alan.springbootmall.dto.ProductQueryParams;
 import com.alan.springbootmall.dto.ProductRequest;
 import com.alan.springbootmall.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,13 @@ public class ProductDaoImpl implements ProductDao {
     ProductListRepository productListRepository;
 
     @Override
-    public List<Product> getProducts(ProductCategory category, String search) {
-        if (category != null && search != null) {
-            return productListRepository.findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(
-                    category, search, category, search);
-        } else if (category != null) {
-            return productListRepository.findByCategoryOrderByProductIdAsc(category);
-        } else if (search != null) {
-            return productListRepository.findByProductNameContainingOrDescriptionContainingOrderByProductIdAsc(search, search);
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
+        if (productQueryParams.getCategory() != null && productQueryParams.getSearch() != null) {
+            return productListRepository.findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(productQueryParams.getCategory(), productQueryParams.getSearch(), productQueryParams.getCategory(), productQueryParams.getSearch());
+        } else if (productQueryParams.getCategory() != null) {
+            return productListRepository.findByCategoryOrderByProductIdAsc(productQueryParams.getCategory());
+        } else if (productQueryParams.getSearch() != null) {
+            return productListRepository.findByProductNameContainingOrDescriptionContainingOrderByProductIdAsc(productQueryParams.getSearch(), productQueryParams.getSearch());
         } else {
             return productListRepository.findAll(); // 查詢所有產品
         }

@@ -1,15 +1,14 @@
 package com.alan.springbootmall.controller;
 
 import com.alan.springbootmall.constant.ProductCategory;
+import com.alan.springbootmall.dto.ProductQueryParams;
 import com.alan.springbootmall.dto.ProductRequest;
 import com.alan.springbootmall.model.Product;
 import com.alan.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
-import jdk.jshell.Snippet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +23,10 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category, @RequestParam(required = false) String search) {
-        List<Product> products = productService.getProducts(category, search);
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setCategory(category);
+        productQueryParams.setSearch(search);
+        List<Product> products = productService.getProducts(productQueryParams);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
