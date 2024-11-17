@@ -25,13 +25,13 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
         if (productQueryParams.getCategory() != null && productQueryParams.getSearch() != null) {
-            return productListRepository.findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(productQueryParams.getCategory(), productQueryParams.getSearch(), productQueryParams.getCategory(), productQueryParams.getSearch());
+            return productListRepository.findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(productQueryParams.getCategory(), productQueryParams.getSearch(), productQueryParams.getCategory(), productQueryParams.getSearch(), productQueryParams.getSort());
         } else if (productQueryParams.getCategory() != null) {
-            return productListRepository.findByCategoryOrderByProductIdAsc(productQueryParams.getCategory());
+            return productListRepository.findByCategory(productQueryParams.getCategory(), productQueryParams.getSort());
         } else if (productQueryParams.getSearch() != null) {
-            return productListRepository.findByProductNameContainingOrDescriptionContainingOrderByProductIdAsc(productQueryParams.getSearch(), productQueryParams.getSearch());
+            return productListRepository.findByProductNameContainingOrDescriptionContaining(productQueryParams.getSearch(), productQueryParams.getSearch(), productQueryParams.getSort());
         } else {
-            return productListRepository.findAll(); // 查詢所有產品
+            return productListRepository.findAll(productQueryParams.getSort()); // 查詢所有產品
         }
     }
 

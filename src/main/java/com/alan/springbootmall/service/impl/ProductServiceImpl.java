@@ -20,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
-        return productDao.getProducts( productQueryParams);
+        return productDao.getProducts(productQueryParams);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProduct(int id, ProductRequest productRequest) {
-         productDao.updateProduct(id,productRequest);
+        productDao.updateProduct(id, productRequest);
     }
 
     @Override

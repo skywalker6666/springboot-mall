@@ -14,13 +14,13 @@ import java.util.List;
 @Component
 public interface ProductListRepository extends ListCrudRepository<Product, Integer> {
 
-    public List<Product> findByProductNameContainingOrDescriptionContainingOrderByProductIdAsc(String productNameKeyWord, String descriptionKeyWord);
+    List<Product> findByProductNameContainingOrDescriptionContaining(String productNameKeyWord, String descriptionKeyWord, Sort sort);
 
-    public List<Product> findByCategoryOrderByProductIdAsc(ProductCategory category);
+    List<Product> findByCategory(ProductCategory category, Sort sort);
 
-    public List<Product> findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(
-            ProductCategory category, String nameKeyword, ProductCategory categoryAgain, String descriptionKeyword);
+    List<Product> findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(
+            ProductCategory category, String nameKeyword, ProductCategory categoryAgain, String descriptionKeyword, Sort sort);
 
-    public List<Product> findByOrderByProductIdAsc();
+    List<Product> findAll(Sort sort);
 
 }

@@ -10,6 +10,7 @@ import java.util.List;
  * @author alan9
  **/
 public interface ProductDao {
+
     List<Product> getProducts(ProductQueryParams productQueryParams);
 
     Product getProductById(int productId);
