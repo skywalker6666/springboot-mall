@@ -25,13 +25,13 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
         if (productQueryParams.getCategory() != null && productQueryParams.getSearch() != null) {
-            return productListRepository.findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(productQueryParams.getCategory(), productQueryParams.getSearch(), productQueryParams.getCategory(), productQueryParams.getSearch(), productQueryParams.getSort());
+            return productListRepository.findByCategoryAndProductNameContainingOrCategoryAndDescriptionContaining(productQueryParams.getCategory(), productQueryParams.getSearch(), productQueryParams.getCategory(), productQueryParams.getSearch(), productQueryParams.getPageable());
         } else if (productQueryParams.getCategory() != null) {
-            return productListRepository.findByCategory(productQueryParams.getCategory(), productQueryParams.getSort());
+            return productListRepository.findByCategory(productQueryParams.getCategory(), productQueryParams.getPageable());
         } else if (productQueryParams.getSearch() != null) {
-            return productListRepository.findByProductNameContainingOrDescriptionContaining(productQueryParams.getSearch(), productQueryParams.getSearch(), productQueryParams.getSort());
+            return productListRepository.findByProductNameContainingOrDescriptionContaining(productQueryParams.getSearch(), productQueryParams.getSearch(), productQueryParams.getPageable());
         } else {
-            return productListRepository.findAll(productQueryParams.getSort()); // 查詢所有產品
+            return productListRepository.findAll(productQueryParams.getPageable()); // 查詢所有產品
         }
     }
 

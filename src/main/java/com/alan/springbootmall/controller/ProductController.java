@@ -6,10 +6,15 @@ import com.alan.springbootmall.dto.ProductRequest;
 import com.alan.springbootmall.model.Product;
 import com.alan.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,17 +27,25 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Validated
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category,
-                                                     @RequestParam(required = false) String search,
-                                                     @RequestParam(defaultValue = "DESC") String sortOrder,
-                                                     @RequestParam(defaultValue = "createdDate") String sortField
-                                                     ) {
-        Sort sort=Sort.by(Sort.Direction.fromString(sortOrder),sortField);
+    public ResponseEntity<List<Product>> getProducts(
+            //Filtering
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search,
+            //Sorting
+            @RequestParam(defaultValue = "DESC") String sortOrder,
+            @RequestParam(defaultValue = "createdDate") String sortField,
+            //Pagination
+            @RequestParam(defaultValue = "0") @Max(1000) @Min(0) Integer page,
+            @RequestParam(defaultValue = "5") @Min(0) Integer size
+    ) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
+        Pageable pageable= PageRequest.of(page,size,sort);
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
-        productQueryParams.setSort(sort);
+        productQueryParams.setPageable(pageable);
         List<Product> products = productService.getProducts(productQueryParams);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }

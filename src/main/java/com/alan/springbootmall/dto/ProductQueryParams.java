@@ -1,7 +1,7 @@
 package com.alan.springbootmall.dto;
 
 import com.alan.springbootmall.constant.ProductCategory;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author alan9
@@ -9,15 +9,17 @@ import org.springframework.data.domain.Sort;
 public class ProductQueryParams {
     ProductCategory category;
     String search;
-   Sort sort;
 
-    public Sort getSort() {
-        return sort;
+    public Pageable getPageable() {
+        return pageable;
     }
 
-    public void setSort(Sort sort) {
-        this.sort = sort;
+    public void setPageable(Pageable pageable) {
+        this.pageable = pageable;
     }
+
+    Pageable pageable;
+
 
     public ProductCategory getCategory() {
         return category;
