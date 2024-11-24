@@ -5,6 +5,7 @@ import com.alan.springbootmall.dto.ProductQueryParams;
 import com.alan.springbootmall.dto.ProductRequest;
 import com.alan.springbootmall.model.Product;
 import com.alan.springbootmall.service.ProductService;
+import com.alan.springbootmall.util.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -41,12 +42,13 @@ public class ProductController {
             @RequestParam(defaultValue = "5") @Min(0) Integer size
     ) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
-        Pageable pageable= PageRequest.of(page,size,sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
         productQueryParams.setPageable(pageable);
         List<Product> products = productService.getProducts(productQueryParams);
+//        Page<Product> page1=new Page<>();
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
