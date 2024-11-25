@@ -29,4 +29,9 @@ public class UserDaoImpl implements UserDao {
     public User getUserById(Integer userId) {
         return userRepository.getUserByUserId(userId);
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
 }

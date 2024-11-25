@@ -10,4 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface UserRepository extends CrudRepository<User, Integer> {
     User getUserByUserId(Integer userId);
+
+    User getUserByEmail(String email);
 }
