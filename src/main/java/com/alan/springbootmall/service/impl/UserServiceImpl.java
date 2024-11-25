@@ -1,6 +1,7 @@
 package com.alan.springbootmall.service.impl;
 
 import com.alan.springbootmall.dao.UserDao;
+import com.alan.springbootmall.dto.UserLoginRequest;
 import com.alan.springbootmall.dto.UserRegisterRequest;
 import com.alan.springbootmall.model.User;
 import com.alan.springbootmall.service.UserService;
@@ -16,15 +17,16 @@ import org.springframework.web.server.ResponseStatusException;
  **/
 @Component
 public class UserServiceImpl implements UserService {
-    private final static Logger logger= LoggerFactory.getLogger(UserServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     UserDao userDao;
+
     @Override
     public Integer register(UserRegisterRequest userRegisterRequest) {
         //檢查註冊之email
-        User user=userDao.getUserByEmail(userRegisterRequest.getEmail());
-        if (user!=null){
-            logger.warn("email：{}已被註冊",userRegisterRequest.getEmail());
+        User user = userDao.getUserByEmail(userRegisterRequest.getEmail());
+        if (user != null) {
+            logger.warn("email：{}已被註冊", userRegisterRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         //創建新帳號
@@ -34,5 +36,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Integer userId) {
         return userDao.getUserById(userId);
+    }
+
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+        if (null == user) {
+            logger.warn("email:{}尚未註冊", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if (user.getPassword().equals(userLoginRequest.getPassword())) {
+            return user;
+        } else {
+            logger.warn("email:{}，密碼不正確", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 }
