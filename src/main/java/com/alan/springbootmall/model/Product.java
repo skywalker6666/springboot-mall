@@ -2,6 +2,7 @@ package com.alan.springbootmall.model;
 
 import com.alan.springbootmall.constant.ProductCategory;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -34,11 +35,10 @@ public class Product {
     @Basic
     @Column(name = "description")
     private String description;
-    @Basic
-    @Column(name = "created_date")
+    @Column(name = "created_date", nullable = false, updatable = false)
     private Timestamp createdDate;
-    @Basic
-    @Column(name = "last_modified_date")
+    @UpdateTimestamp
+    @Column(name = "last_modified_date", nullable = false)
     private Timestamp lastModifiedDate;
 
     public int getProductId() {
