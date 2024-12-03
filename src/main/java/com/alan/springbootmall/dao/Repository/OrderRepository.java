@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * @author alan9
  **/
-public interface OrderRepository extends CrudRepository<Orders,Integer> {
-
+public interface OrderRepository extends CrudRepository<Orders, Integer> {
+    Orders getOrdersByOrderId(Integer orderId);
 }

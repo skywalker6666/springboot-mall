@@ -1,10 +1,12 @@
 package com.alan.springbootmall.model;
 
+import com.alan.springbootmall.dto.OrderItemProductDto;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -16,10 +18,8 @@ public class Orders {
     @Id
     @Column(name = "order_id")
     private int orderId;
-    @Basic
     @Column(name = "user_id")
     private int userId;
-    @Basic
     @Column(name = "total_amount")
     private int totalAmount;
     @CreationTimestamp
@@ -28,10 +28,29 @@ public class Orders {
     @UpdateTimestamp
     @Column(name = "last_modified_date", nullable = false)
     private Timestamp lastModifiedDate;
+    @Transient//非持久性欄位
+    private List<OrderItemProductDto> orderItemList;
+
+    public List<OrderItemProductDto> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItemProductDto> orderItemList) {
+        this.orderItemList = orderItemList;
+    }
 
     public Orders(int userId, int totalAmount) {
         this.userId = userId;
         this.totalAmount = totalAmount;
+    }
+
+    public Orders(int orderId, int userId, int totalAmount, Timestamp createdDate, Timestamp lastModifiedDate, List<OrderItemProductDto> orderItemList) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.totalAmount = totalAmount;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.orderItemList = orderItemList;
     }
 
     public Orders() {

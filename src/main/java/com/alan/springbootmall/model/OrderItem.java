@@ -14,19 +14,17 @@ public class OrderItem {
     @Id
     @Column(name = "order_item_id")
     private int orderItemId;
-    @Basic
     @Column(name = "order_id")
     private int orderId;
-    @Basic
     @Column(name = "product_id")
     private int productId;
-    @Basic
     @Column(name = "quantity")
     private int quantity;
-    @Basic
     @Column(name = "amount")
     private int amount;
-
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
+    private Product product;
     public int getOrderItemId() {
         return orderItemId;
     }
@@ -65,6 +63,9 @@ public class OrderItem {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public OrderItem() {
     }
 
     @Override
