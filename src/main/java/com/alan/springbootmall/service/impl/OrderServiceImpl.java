@@ -10,8 +10,12 @@ import com.alan.springbootmall.model.Orders;
 import com.alan.springbootmall.model.Product;
 import com.alan.springbootmall.service.OrderService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,8 @@ import java.util.List;
  **/
 @Component
 public class OrderServiceImpl implements OrderService {
+    private final static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
     @Autowired
     OrderDao orderDao;
     @Autowired
@@ -35,6 +41,20 @@ public class OrderServiceImpl implements OrderService {
         for (BuyItem buyItem : createOrderRequest.getBuyItemList()) {
             System.out.println(buyItem.toString());
             Product product = productDao.getProductById(buyItem.getProductId());
+            //檢查商品是否存在
+            if (null == product) {
+                logger.warn("商品{}不存在", buyItem.getProductId());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+            }
+            //檢查庫存是否足夠
+            else if (product.getStock() < buyItem.getQuantity()) {
+                logger.warn("商品{}庫存不足，無法購買。剩餘庫存:{}，欲購買數量:{}", product.getProductId(), product.getStock(), buyItem.getQuantity());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            //扣除商品庫存
+            productDao.updateStockById(buyItem.getProductId(), product.getStock() - buyItem.getQuantity());
+            //計算總價錢
             int amount = buyItem.getQuantity() * product.getPrice();
             totalAmount += amount;
             //轉換buyItem to orderItem
@@ -44,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setAmount(amount);
             orderItemList.add(orderItem);
         }
-        System.out.println("orderItemList size:"+orderItemList.size());
+        System.out.println("orderItemList size:" + orderItemList.size());
         Integer orderId = orderDao.createOrder(userId, totalAmount);
         orderDao.createOrderItem(orderId, orderItemList);
         return orderId;

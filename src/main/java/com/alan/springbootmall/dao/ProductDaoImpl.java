@@ -5,6 +5,9 @@ import com.alan.springbootmall.dao.Repository.ProductRepository;
 import com.alan.springbootmall.dto.ProductQueryParams;
 import com.alan.springbootmall.dto.ProductRequest;
 import com.alan.springbootmall.model.Product;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +24,8 @@ public class ProductDaoImpl implements ProductDao {
     ProductRepository productRepository;
     @Autowired
     ProductListRepository productListRepository;
-
+    @PersistenceContext
+    private EntityManager em;
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
         if (productQueryParams.getCategory() != null && productQueryParams.getSearch() != null) {
@@ -73,5 +77,13 @@ public class ProductDaoImpl implements ProductDao {
 
     public void deleteProduct(int id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateStockById(int id,int stock) {
+        Query query = em.createQuery("UPDATE Product p SET p.stock = :stock WHERE p.id = :id");
+        query.setParameter("stock", stock);
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 }
