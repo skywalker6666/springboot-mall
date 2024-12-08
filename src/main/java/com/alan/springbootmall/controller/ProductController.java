@@ -48,7 +48,6 @@ public class ProductController {
         productQueryParams.setSearch(search);
         productQueryParams.setPageable(pageable);
         List<Product> products = productService.getProducts(productQueryParams);
-//        Page<Product> page1=new Page<>();
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 

@@ -2,6 +2,7 @@ package com.alan.springbootmall.dao;
 
 
 import com.alan.springbootmall.dao.Repository.OrderItemListRepository;
+import com.alan.springbootmall.dao.Repository.OrderListRepository;
 import com.alan.springbootmall.dao.Repository.OrderRepository;
 import com.alan.springbootmall.dto.OrderItemProductDto;
 import com.alan.springbootmall.model.Orders;
@@ -25,6 +26,8 @@ import java.util.List;
 public class OrderDaoImpl implements OrderDao {
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    OrderListRepository orderListRepository;
     @Autowired
     OrderItemListRepository orderItemListRepository;
     @PersistenceContext
@@ -69,9 +72,7 @@ public class OrderDaoImpl implements OrderDao {
                 product.get("productName"), // 僅選取需要的欄位
                 product.get("imageUrl")    // 僅選取需要的欄位
         )).where(builder.equal(orderItemRoot.get("orderId"), orderId));
-        List<OrderItemProductDto> orderItemProductDtoList = entityManager.createQuery(query).getResultList();
-        System.out.println("DTO size:" + orderItemProductDtoList.size());
-        return orderItemProductDtoList;
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
@@ -81,5 +82,10 @@ public class OrderDaoImpl implements OrderDao {
         Root<Orders> orders = query.from(Orders.class);
         query.select(orders);
         return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<Orders> getOrdersByUserId(Integer userId) {
+        return orderListRepository.getOrdersByUserId(userId);
     }
 }

@@ -5,6 +5,7 @@ import com.alan.springbootmall.dao.ProductDao;
 import com.alan.springbootmall.dto.BuyItem;
 import com.alan.springbootmall.dto.CreateOrderRequest;
 import com.alan.springbootmall.dto.OrderItemProductDto;
+import com.alan.springbootmall.dto.OrderQueryParams;
 import com.alan.springbootmall.model.OrderItem;
 import com.alan.springbootmall.model.Orders;
 import com.alan.springbootmall.model.Product;
@@ -81,5 +82,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Orders> getAllOrder() {
         return orderDao.getAllOrder();
+    }
+
+    @Override
+    public List<Orders> getOrders(OrderQueryParams orderQueryParams) {
+        List<Orders> ordersList = orderDao.getOrdersByUserId(orderQueryParams.getUserId());
+        for (Orders orders : ordersList) {
+            List<OrderItemProductDto> orderItemProductDtoList = orderDao.getOrderItemByOrderId(orders.getOrderId());
+            orders.setOrderItemList(orderItemProductDtoList);
+        }
+        return ordersList;
     }
 }

@@ -19,4 +19,6 @@ public interface OrderDao {
     List<OrderItemProductDto> getOrderItemByOrderId(Integer orderId);
 
     List<Orders> getAllOrder();
+
+    List<Orders> getOrdersByUserId(Integer userId);
 }
